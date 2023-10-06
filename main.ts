@@ -47,14 +47,9 @@ async function getBalance(wallet: string, proxy?: {ip: string, port: string, use
             const requestHeaders = response.request().headers()
             if(requestHeaders['x-api-sign'] && requestHeaders['account']) {
                 // console.log(requestHeaders)
-                resolve(requestHeaders)
-            }
-
-            if(response.url().includes('https://api.debank.com/asset/net_curve_24h') && response.request().method() !== 'OPTIONS') {
-                let res = await response.json()
-                const arr = res.data.usd_value_list
                 await browser.close()
-                resolve(Number(arr[arr.length - 1][1]))
+                resolve(requestHeaders)
+                return
             }
         })
 
@@ -71,7 +66,6 @@ async function getBalance(wallet: string, proxy?: {ip: string, port: string, use
         await page.goto(url);
     })
 
-    await browser.close()
     return response
 }
 
